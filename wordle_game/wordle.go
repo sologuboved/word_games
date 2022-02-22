@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"strings"
 	"time"
-	// "/Users/sologuboved/Golang/src/word_games/misc"
 )
 
 func getWord (maxlen int) string {
