@@ -1,10 +1,26 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"math/rand"
 	"strings"
-	// "math/rand"
+	"time"
 )
+
+func getWord (maxlen int) string {
+	f, _ := os.Open("english.txt")
+	input := bufio.NewScanner(f)
+	words := make([]string, 0)
+	for input.Scan() {
+		word := input.Text()
+		if len(word) == maxlen {
+			words = append(words, word)
+		}
+	}
+	return words[rand.Intn(len(words))]
+}
 
 func getVerdict(candidate, word string) (string, []string, []string) {
 	len_word := len(word)
@@ -34,5 +50,7 @@ func getVerdict(candidate, word string) (string, []string, []string) {
 }
 
 func main() {
-	fmt.Println(getVerdict("skate", "place"))
+	rand.Seed(time.Now().UnixNano())
+	// fmt.Println(getVerdict("skate", "place"))
+	fmt.Println(getWord(5))
 }
