@@ -86,7 +86,7 @@ func main() {
 		fmt.Println(masked)
 		fmt.Printf("Wrongly positioned: %v\n", incl)
 		fmt.Printf("Not there: %v\n", excl)
-		fmt.Printf("(%v total)", getSet(allExcl))
+		fmt.Printf("(%v total)\n", getSet(allExcl))
 		if !strings.Contains(masked, "_") {
 			fmt.Printf("Right, it was %s\n", mysteryWord)
 			break
