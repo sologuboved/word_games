@@ -3,14 +3,28 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"path/filepath"
 	"os"
 	"strings"
 	"unicode"
 )
 
+func getSrcFname(fname string) string {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	parent := filepath.Dir(wd)
+	return parent + "/words/" + fname 
+}
+
 func clean (fname string) {
+	fname = getSrcFname(fname)
 	output := make([]string, 0)
-	f, _ := os.Open(fname)
+	f, err := os.Open(fname)
+	if err != nil {
+		panic(err)
+	}
 	input := bufio.NewScanner(f)
 	for input.Scan() {
 		isSuitable := true
@@ -31,7 +45,10 @@ func clean (fname string) {
 		}
 	}
 	fmt.Printf("Found %d suitable words\n", len(output))
-	f, _ = os.Create(fname)
+	f, err = os.Create(fname)
+	if err != nil {
+		panic(err)
+	}
 	defer f.Close()
 	f.WriteString(strings.Join(output, "\n"))
 }

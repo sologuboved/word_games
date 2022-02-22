@@ -7,10 +7,11 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+	// "/Users/sologuboved/Golang/src/word_games/misc"
 )
 
 func getWord (maxlen int) string {
-	f, _ := os.Open("english.txt")
+	f, _ := os.Open(getSrcFname("english.txt"))
 	input := bufio.NewScanner(f)
 	words := make([]string, 0)
 	for input.Scan() {
@@ -58,7 +59,7 @@ func main() {
 	for input.Scan() {
 		candidate := input.Text()
 		if candidate == "fin" {
-			fmt.Printf("Mystery word was %s\n", mysteryWord)
+			fmt.Printf("\nMystery word was %s\n", mysteryWord)
 			break
 		}
 		masked, incl, excl := getVerdict(candidate, mysteryWord)
