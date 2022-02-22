@@ -28,7 +28,7 @@ func getVerdict(candidate, word string) (string, []string, []string) {
 	for i := range masked {
 		masked[i] = "_"
 	}
-	incl := make([]string, len_word)
+	incl := make([]string, 0)
 	excl := make([]string, 0)
 	if len(candidate) != len_word {
 		fmt.Println("Wrong length")
@@ -51,6 +51,25 @@ func getVerdict(candidate, word string) (string, []string, []string) {
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	// fmt.Println(getVerdict("skate", "place"))
-	fmt.Println(getWord(5))
+	maxlen := 5
+	mysteryWord := getWord(maxlen)
+	input := bufio.NewScanner(os.Stdin)
+	fmt.Println("Any ideas?")
+	for input.Scan() {
+		candidate := input.Text()
+		if candidate == "fin" {
+			fmt.Printf("Mystery word was %s\n", mysteryWord)
+			break
+		}
+		masked, incl, excl := getVerdict(candidate, mysteryWord)
+		fmt.Println()
+		fmt.Println(masked)
+		fmt.Printf("Wrongly positioned: %v\n", incl)
+		fmt.Printf("Not there: %v\n", excl)
+		if !strings.Contains(masked, "_") {
+			fmt.Printf("Right, it was %s\n", mysteryWord)
+			break
+		}
+		fmt.Println("\nNext idea?")
+	}
 }
