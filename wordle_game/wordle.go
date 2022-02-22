@@ -9,6 +9,9 @@ import (
 	"time"
 )
 
+type void struct{}
+var placeholder void
+
 func getWord (maxlen int) string {
 	f, _ := os.Open(getSrcFname("english.txt"))
 	input := bufio.NewScanner(f)
@@ -49,9 +52,20 @@ func getVerdict(candidate, word string) (string, []string, []string) {
 	return strings.Join(masked, ""), incl, excl
 }
 
+func getSet(seq map[string]void) []string {
+	keys := make([]string, len(seq))
+	i := 0
+	for key := range seq {
+		keys[i] = key
+		i++
+	}
+	return keys
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	maxlen := 5
+	allExcl := make(map[string]void)
 	mysteryWord := getWord(maxlen)
 	input := bufio.NewScanner(os.Stdin)
 	fmt.Println("Any ideas?")
@@ -62,10 +76,17 @@ func main() {
 			break
 		}
 		masked, incl, excl := getVerdict(candidate, mysteryWord)
+		for _, char := range excl {
+			_, ok := allExcl[char]
+			if !ok {
+				allExcl[char] = placeholder
+			}
+		}
 		fmt.Println()
 		fmt.Println(masked)
 		fmt.Printf("Wrongly positioned: %v\n", incl)
 		fmt.Printf("Not there: %v\n", excl)
+		fmt.Printf("(%v total)", getSet(allExcl))
 		if !strings.Contains(masked, "_") {
 			fmt.Printf("Right, it was %s\n", mysteryWord)
 			break
